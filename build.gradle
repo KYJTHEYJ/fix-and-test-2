@@ -34,6 +34,11 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
+    // OpenFeign QueryDSL
+    implementation 'io.github.openfeign.querydsl:querydsl-core:7.1'
+    implementation 'io.github.openfeign.querydsl:querydsl-jpa:7.1'
+    annotationProcessor 'io.github.openfeign.querydsl:querydsl-apt:7.1:jpa'
+
     // bcrypt
     implementation 'at.favre.lib:bcrypt:0.10.2'
 

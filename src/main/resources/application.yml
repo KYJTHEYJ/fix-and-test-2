@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: fix-and-test-v2
+  profiles:
+    active: dev
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USER_NAME}
+    password: ${DB_PASSWORD}
+
+  # JPA
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQLDialect

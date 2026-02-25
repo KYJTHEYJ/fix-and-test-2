@@ -1,0 +1,8 @@
+services:
+  db:
+    env_file:
+      - .env.dev
+    volumes:
+      - ./dev-db-data:/var/lib/mysql
+    ports:
+      - "13309:3306"

@@ -1,0 +1,7 @@
+services:
+  db:
+    image: mysql:8.4.8
+    container_name: mysql_fix-and-test-v2-dev
+
+networks:
+  fix-and-test-v2-dev-network:

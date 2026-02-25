@@ -1,0 +1,11 @@
+# JWT
+jwt:
+  secret:
+    key: ${DEV_JWT_KEY}
+
+server:
+  port: 8080
+
+logging:
+  level:
+    root: info

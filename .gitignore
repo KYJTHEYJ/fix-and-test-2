@@ -38,3 +38,10 @@ out/
 
 ### properties ###
 *.properties
+
+### .env ###
+.env.*
+.env
+
+### db-volume data ###
+dev-db-data
