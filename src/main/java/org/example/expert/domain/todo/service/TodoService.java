@@ -67,7 +67,7 @@ public class TodoService {
             modified_end_at = modified_end.atTime(23, 59, 59);
         }
 
-        Page<Todo> todos = todoRepository.findAllByOrderByModifiedAtDesc2(pageable, weather, modified_start_at, modified_end_at);
+        Page<Todo> todos = todoRepository.findAllByOrderByModifiedAtDescWithOptions(pageable, weather, modified_start_at, modified_end_at);
 
         return todos.map(todo -> new TodoResponse(
                 todo.getId(),

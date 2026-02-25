@@ -24,7 +24,7 @@ public interface TodoRepository extends JpaRepository<Todo, Long> {
             "AND (:modified_start IS NULL OR t.modifiedAt >= :modified_start) " +
             "AND (:modified_end IS NULL OR t.modifiedAt <= :modified_end) " +
             "ORDER BY t.modifiedAt DESC")
-    Page<Todo> findAllByOrderByModifiedAtDesc2(Pageable pageable, String weather, LocalDateTime modified_start, LocalDateTime modified_end);
+    Page<Todo> findAllByOrderByModifiedAtDescWithOptions(Pageable pageable, String weather, LocalDateTime modified_start, LocalDateTime modified_end);
 
 
     @Query("SELECT t FROM Todo t " +
