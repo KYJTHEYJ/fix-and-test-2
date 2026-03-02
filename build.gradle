@@ -27,6 +27,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    testImplementation 'org.springframework.security:spring-security-test'
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'com.h2database:h2'
     runtimeOnly 'com.mysql:mysql-connector-j'
@@ -38,9 +40,6 @@ dependencies {
     implementation 'io.github.openfeign.querydsl:querydsl-core:7.1'
     implementation 'io.github.openfeign.querydsl:querydsl-jpa:7.1'
     annotationProcessor 'io.github.openfeign.querydsl:querydsl-apt:7.1:jpa'
-
-    // bcrypt
-    implementation 'at.favre.lib:bcrypt:0.10.2'
 
     // jwt
     compileOnly group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.5'
