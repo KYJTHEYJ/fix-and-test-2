@@ -2,10 +2,12 @@ package org.example.expert.domain.todo.service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.expert.client.WeatherClient;
+import org.example.expert.domain.common.dto.PageResponse;
 import org.example.expert.domain.common.exception.InvalidRequestException;
 import org.example.expert.domain.todo.dto.request.TodoSaveRequest;
 import org.example.expert.domain.todo.dto.response.TodoResponse;
 import org.example.expert.domain.todo.dto.response.TodoSaveResponse;
+import org.example.expert.domain.todo.dto.response.TodoSearchResponse;
 import org.example.expert.domain.todo.entity.Todo;
 import org.example.expert.domain.todo.repository.TodoRepository;
 import org.example.expert.domain.todo.repository.TodoRepositoryWithQueryDSL;
@@ -58,8 +60,6 @@ public class TodoService {
     public Page<TodoResponse> getTodos(int page, int size, String weather, LocalDate modified_start, LocalDate modified_end) {
         Pageable pageable = PageRequest.of(page - 1, size);
 
-        // Page<Todo> todos = todoRepository.findAllByOrderByModifiedAtDesc(pageable);
-
         LocalDateTime modified_start_at = null;
         LocalDateTime modified_end_at = null;
 
@@ -85,24 +85,25 @@ public class TodoService {
     }
 
     @Transactional(readOnly = true)
+    public Page<TodoSearchResponse> getTodosWithQueryDSL(int page, int size, String title, String nickName, LocalDate created_start, LocalDate created_end) {
+        Pageable pageable = PageRequest.of(page - 1, size);
+
+        LocalDateTime created_start_at = null;
+        LocalDateTime created_end_at = null;
+
+        if (created_start != null) {
+            created_start_at = created_start.atStartOfDay();
+        }
+
+        if (created_end != null) {
+            created_end_at = created_end.atTime(23, 59, 59);
+        }
+
+        return todoRepositoryWithQueryDSL.findAllByMultiCondition(pageable, title, nickName, created_start_at, created_end_at);
+    }
+
+    @Transactional(readOnly = true)
     public TodoResponse getTodo(long todoId) {
-        /*
-        Todo todo = todoRepository.findByIdWithUser(todoId)
-                .orElseThrow(() -> new InvalidRequestException("Todo not found"));
-
-        User user = todo.getUser();
-
-        return new TodoResponse(
-                todo.getId(),
-                todo.getTitle(),
-                todo.getContents(),
-                todo.getWeather(),
-                new UserResponse(user.getId(), user.getEmail(), user.getNickname()),
-                todo.getCreatedAt(),
-                todo.getModifiedAt()
-        );
-        */
-
-        return todoRepositoryWithQueryDSL.findByIdWithUser2(todoId).orElseThrow(() -> new InvalidRequestException("Todo not found"));
+        return todoRepositoryWithQueryDSL.findByIdWithUserWithQueryDSL(todoId).orElseThrow(() -> new InvalidRequestException("Todo not found"));
     }
 }
