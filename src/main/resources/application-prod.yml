@@ -1,8 +1,12 @@
 spring:
+  config:
+    import: "aws-parameterstore:/fix-and-test-v2/prod/"
+
   datasource:
-    url: ${DB_URL}
-    username: ${DB_USER_NAME}
-    password: ${DB_PASSWORD}
+    driver-class-name: ${DB_DRIVER}
+    url: ${DB_HOST}
+    username: ${DB_USER}
+    password: ${DB_PWD}
 
   cloud:
     aws:
@@ -10,10 +14,6 @@ spring:
         static: ap-northeast-2
       s3:
         bucket: ${BUCKET_URL}
-      credentials:
-        access-key: ${ACCESS_KEY}
-        secret-key: ${SECRET_KEY}
-
 
   servlet:
     multipart:
@@ -22,7 +22,7 @@ spring:
 # JWT
 jwt:
   secret:
-    key: ${DEV_JWT_KEY}
+    key: ${PROD_JWT_KEY}
 
 server:
   port: 8080

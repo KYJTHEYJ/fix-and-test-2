@@ -30,6 +30,7 @@ public class SecurityConfig {
                 .formLogin(formLoginConfigurer -> formLoginConfigurer.disable())
                 .httpBasic(httpBasicConfigurer -> httpBasicConfigurer.disable())
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
+                        .requestMatchers("/actuator/**").permitAll()
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated())

@@ -3,10 +3,6 @@ spring:
     name: fix-and-test-v2
   profiles:
     active: dev
-  datasource:
-    url: ${DB_URL}
-    username: ${DB_USER_NAME}
-    password: ${DB_PASSWORD}
 
   # JPA
   jpa:
