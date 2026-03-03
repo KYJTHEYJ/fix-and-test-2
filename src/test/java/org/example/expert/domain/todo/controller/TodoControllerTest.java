@@ -48,6 +48,17 @@ class TodoControllerTest {
         }).when(jwtFilter).doFilter(any(), any(), any());
     }
 
+    // jwtFilter.doFilter가 호출시 doAnswer의 코드를 실행
+    // invocation -> 실제로 호출된 메서드의 정보를 담음
+    // invocation 의 getArugument로 각 메서드의 인자를 제공
+
+    // doFilter(request, response, chain) 으로 호출 되었으니,
+    // invocation.getArgument(0) = request
+    // invocation.getArgument(1) = response
+    // invocation.getArgument(2) = chain
+
+    // 필터 체인을 이제 다음 단계로 진행
+
     @Test
     @WithMockUser(username = "tester", roles = "ADMIN")
     void todo_단건_조회에_성공한다() throws Exception {
