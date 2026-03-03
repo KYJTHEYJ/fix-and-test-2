@@ -1,20 +1,27 @@
 package org.example.expert.domain.todo.controller;
 
+import jakarta.servlet.FilterChain;
+import org.example.expert.config.JwtFilter;
 import org.example.expert.domain.common.exception.InvalidRequestException;
 import org.example.expert.domain.todo.dto.response.TodoResponse;
 import org.example.expert.domain.todo.service.TodoService;
 import org.example.expert.domain.user.dto.response.UserResponse;
 import org.example.expert.domain.user.entity.User;
 import org.example.expert.domain.user.enums.UserRole;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -29,13 +36,26 @@ class TodoControllerTest {
     @MockBean
     private TodoService todoService;
 
+    @MockBean
+    private JwtFilter jwtFilter;
+
+    @BeforeEach
+    void setUp() throws Exception {
+        doAnswer(invocation -> {
+            FilterChain chain = invocation.getArgument(2);
+            chain.doFilter(invocation.getArgument(0), invocation.getArgument(1));
+            return null;
+        }).when(jwtFilter).doFilter(any(), any(), any());
+    }
+
     @Test
+    @WithMockUser(username = "tester", roles = "ADMIN")
     void todo_단건_조회에_성공한다() throws Exception {
         // given
         long todoId = 1L;
         String title = "title";
-        AuthUser authUser = new AuthUser(1L, "email", "TESTER", UserRole.USER);
-        User user = User.fromAuthUser(authUser);
+        User user = new User("test@test.com", "test1234", "user-test", UserRole.ADMIN);
+        ReflectionTestUtils.setField(user, "id", 1L);
         UserResponse userResponse = new UserResponse(user.getId(), user.getEmail(), user.getNickname());
         TodoResponse response = new TodoResponse(
                 todoId,
@@ -58,6 +78,7 @@ class TodoControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "tester", roles = "ADMIN")
     void todo_단건_조회_시_todo가_존재하지_않아_예외가_발생한다() throws Exception {
         // given
         long todoId = 1L;

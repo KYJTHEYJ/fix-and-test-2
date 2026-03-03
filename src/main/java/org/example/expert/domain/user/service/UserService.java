@@ -31,6 +31,11 @@ public class UserService {
         return new UserResponse(user.getId(), user.getEmail(), user.getNickname());
     }
 
+    public UserResponse getUserByNickname(String nickname) {
+        User user = userRepository.findByNickname(nickname).orElseThrow(() -> new InvalidRequestException("User not found"));
+        return new UserResponse(user.getId(), user.getEmail(), user.getNickname());
+    }
+
     @Transactional
     public void changePassword(long userId, UserChangePasswordRequest userChangePasswordRequest) {
         validateNewPassword(userChangePasswordRequest);
@@ -78,7 +83,7 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public ImageSearchResponse searchImage(Long userId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new InvalidRequestException("User not found"));
+        userRepository.findById(userId).orElseThrow(() -> new InvalidRequestException("User not found"));
         Image image = imageRepository.findByUserId(userId).orElseThrow(() -> new InvalidRequestException("Image not found"));
         URL downloadUrl = imageS3Service.getDownloadUrl(image.getImageKey());
 
